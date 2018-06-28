@@ -1,0 +1,8 @@
+prefix=/home/halley/sandbox/devel
+
+Name: abb_irb6600_support
+Description: Description of abb_irb6600_support
+Version: 1.2.1
+Cflags: 
+Libs: -L/home/halley/sandbox/devel/lib 
+Requires: 

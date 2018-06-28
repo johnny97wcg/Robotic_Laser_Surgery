@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find irb120_description)/urdf/common_colours.xacro"/>
+
+  <material name="abb_orange">
+    <color rgba="${colour_abb_orange}"/>
+  </material>
+
+  <material name="abb_graphite_white">
+    <color rgba="${colour_abb_graphite_white}"/>
+  </material>
+
+  <material name="abb_white">
+    <color rgba="${colour_abb_white}"/>
+  </material>
+
+  <material name="abb_pebble_gray">
+    <color rgba="${colour_abb_pebble_gray}"/>
+  </material>
+
+  <material name="abb_dark_gray">
+    <color rgba="${colour_abb_dark_gray}"/>
+  </material>
+
+  <material name="abb_black">
+    <color rgba="${colour_abb_black}"/>
+  </material>
+
+  <material name="abb_signal_red">
+    <color rgba="${colour_abb_signal_red}"/>
+  </material>
+
+  <material name="abb_carmine_red">
+    <color rgba="${colour_abb_carmine_red}"/>
+  </material>
+
+  <material name="abb_ultramarine_blue">
+    <color rgba="${colour_abb_ultramarine_blue}"/>
+  </material>
+
+  <material name="abb_sky_blue">
+    <color rgba="${colour_abb_sky_blue}"/>
+  </material>
+
+  <material name="abb_leaf_green">
+    <color rgba="${colour_abb_leaf_green}"/>
+  </material>
+
+  <material name="abb_gray_white">
+    <color rgba="${colour_abb_gray_white}"/>
+  </material>
+
+  <material name="abb_pure_white">
+    <color rgba="${colour_abb_pure_white}"/>
+  </material>
+
+  <material name="abb_yellow">
+    <color rgba="${colour_abb_yellow}"/>
+  </material>
+
+</robot>

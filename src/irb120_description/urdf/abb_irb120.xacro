@@ -1,0 +1,325 @@
+<?xml version="1.0" ?>
+<robot name="abb_irb120" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- ///////////////// this file is improved upon the old file irb120.xacro -CW 6/6/18 ///////////////////////// -->
+
+  <!--  include materials (for unsimplified old code, see common_materials.xacro)-->
+  <xacro:include filename="$(find irb120_description)/urdf/abb_materials.xacro"/>
+
+  <!-- macro for the visual and collision block inside link -->
+  <xacro:macro name="visual-collision" params="link_name">
+    <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+    <mesh filename="package://irb120_description/meshes/visual/${link_name}.stl"/>
+    </geometry>
+    <material name="abb_orange" />
+    </visual>
+
+    <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+    <mesh filename="package://irb120_description/meshes/collision/${link_name}.stl"/>
+    </geometry>
+    </collision>
+  </xacro:macro>
+
+  <!-- macro for transmission -->
+  <xacro:macro name="transmission_block" params="number">
+    <transmission name="tran${number}">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_${number}">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor${number}">
+    <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- world link -->
+  <link name="world"/>
+
+  <!-- loading table model and workobject -->
+  <joint name="table_joint" type="fixed">
+  <parent link="world"/>
+  <child link="Table"/>
+  <origin rpy="0 0 0" xyz="0.2 0 0"/>
+  </joint>
+  <link name="Table">
+    <inertial>
+      <origin xyz="0 0 -0.06" rpy="0 0 0" />
+      <mass value="26.973" />
+      <inertia ixx="1"     ixy="1" ixz="1"
+             iyy="1" iyz="1"    izz="1" />
+   </inertial>
+    <visual>
+      <origin xyz="0 0 -0.06" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://irb120_description/meshes/visual/Table.STL" />
+      </geometry>
+      <material name="abb_dark_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.06" rpy="0 0 0" />
+      <geometry>
+      <mesh filename="package://irb120_description/meshes/collision/Table.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- <joint name="workobject_joint" type="fixed">
+  <parent link="Table"/>
+  <child link="workobject"/>
+  <origin rpy="0 0 0" xyz="0.25 0 0.01"/>
+  </joint>
+  <link name="workobject">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.05"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://irb120_description/meshes/visual/tissue_base.stl"/>
+      </geometry>
+      <material name="abb_carmine_red"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://irb120_description/meshes/collision/tissue_base_simple.stl"/>
+      </geometry>
+    </collision>
+  </link> -->
+
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  <joint name="base_joint" type="fixed">
+  <parent link="world"/>
+  <child link="base_link"/>
+  <origin rpy="0 0 -1.57079632679" xyz="0 0 0"/>
+  </joint>
+  <!-- Description of base_link -->
+  <link name="base_link">
+  <inertial>
+  <mass value="6.215"/>
+  <origin xyz="0 0 0" rpy="0 0 0"/>
+  <inertia ixx="0.0247272" ixy="-8.0784E-05" ixz="0.00130902" iyy="0.0491285" iyz="-8.0419E-06" izz="0.0472376"/>
+  </inertial>
+  <xacro:visual-collision link_name="base_link" />
+  </link>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Joint - 1 -->
+  <joint name="joint_1" type="revolute">
+  <origin rpy="0 0 0" xyz="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="link_1"/>
+  <limit effort="100" lower="-2.87979" upper="2.87979" velocity="4.36332"/>
+  <axis xyz="0 0 1"/>
+  <dynamics damping="1" friction="0"/>
+  </joint>
+
+  <!-- Description of link - 1 -->
+  <link name="link_1">
+  <inertial>
+  <mass value="3.067" />
+  <origin xyz="0 0 0.23841" rpy="0 0 0"/>
+  <inertia ixx="0.0142175" ixy="-1.28579E-05" ixz="-2.31364E-05" iyy="0.0144041" iyz="1.93404E-05" izz="0.0104533"/>
+  </inertial>
+  <xacro:visual-collision link_name="link_1" />
+  </link>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Joint - 2 -->
+  <joint name="joint_2" type="revolute">
+  <origin rpy="0 0 3.1415926535" xyz="0 0 0.29"/>
+  <parent link="link_1"/>
+  <child link="link_2"/>
+  <limit effort="100" lower="-1.91986" upper="1.91986" velocity="4.36332"/>
+  <axis xyz="0 -1 0"/>
+  <dynamics damping="1" friction="0"/>
+  </joint>
+
+  <!-- Description of link - 2 -->
+  <link name="link_2">
+  <inertial>
+  <mass value="3.909"/>
+  <origin xyz="0.00078 -0.00212 0.10124" rpy="0 0 0"/>
+  <inertia ixx="0.0603111" ixy="9.83431E-06" ixz="5.72407E-05" iyy="0.041569" iyz="-0.00050497" izz="0.0259548"/>
+  </inertial>
+  <xacro:visual-collision link_name="link_2" />
+  </link>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Joint - 3 -->
+  <joint name="joint_3" type="revolute">
+  <origin rpy="0 0 3.1415926535" xyz="0 0 0.27"/>
+  <parent link="link_2"/>
+  <child link="link_3"/>
+  <limit effort="100" lower="-1.91986" upper="1.22173" velocity="4.36332"/>
+  <axis xyz="0 -1 0"/>
+  <dynamics damping="1" friction="0.0"/>
+  </joint>
+
+  <!-- Description of link - 3 -->
+  <link name="link_3">
+  <inertial>
+  <mass value="2.944"/>
+  <origin xyz="0.02281 0.00106 0.05791" rpy="0 0 0"/>
+  <inertia ixx="0.00835606" ixy="-8.01545E-05" ixz="0.00142884" iyy="0.016713" iyz="-0.000182227" izz="0.0126984"/>
+  </inertial>
+  <xacro:visual-collision link_name="link_3" />
+  </link>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Joint - 4 -->
+  <joint name="joint_4" type="revolute">
+  <origin rpy="0 0 0" xyz="0 0 0.07"/>
+  <parent link="link_3"/>
+  <child link="link_4"/>
+  <limit effort="20" lower="-2.79253" upper="2.79253" velocity="5.58505"/>
+  <axis xyz="1 0 0"/>
+  <dynamics damping="1" friction="0"/>
+  </joint>
+
+  <!--  Description of link - 4 -->
+  <link name="link_4">
+  <inertial>
+  <mass value="0.1328"/>
+  <origin xyz="0.2247 0.00015 0.00041" rpy="0 0 0"/>
+  <inertia ixx="0.00284661" ixy="-2.12765E-05" ixz="-1.6435E-05" iyy="0.00401346" iyz="1.31336E-05" izz="0.0052535"/>
+  </inertial>
+  <xacro:visual-collision link_name="link_4" />
+  </link>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Joint - 5 -->
+  <joint name="joint_5" type="revolute">
+  <origin rpy="3.1415926535 0 0" xyz="0.302 0 0"/>
+  <parent link="link_4"/>
+  <child link="link_5"/>
+  <limit effort="20" lower="-2.094395" upper="2.094395" velocity="5.58505"/>
+  <axis xyz="0 -1 0"/>
+  <dynamics damping="1" friction="0.0"/>
+  </joint>
+
+  <!-- Description of link - 5-->
+  <link name="link_5">
+  <inertial>
+  <mass value="0.546"/>
+  <origin xyz="-0.00109 3.68E-05 6.22E-05" rpy="0 0 0"/>
+  <inertia ixx="0.00284661" ixy="-2.12765E-05" ixz="-1.6435E-05" iyy="0.00401346" iyz="1.31336E-05" izz="0.0052535"/>
+  </inertial>
+  <xacro:visual-collision link_name="link_5" />
+  </link>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Joint - 6 -->
+  <joint name="joint_6" type="revolute">
+  <origin rpy="0 0 0" xyz="0.072 0 0"/>
+  <parent link="link_5"/>
+  <child link="link_6"/>
+  <limit effort="20" lower="-6.98132" upper="6.98132" velocity="7.33038"/>
+  <axis xyz="1 0 0"/>
+  <dynamics damping="1" friction="0.0"/>
+  </joint>
+
+  <!-- Description of link - 6 -->
+  <link name="link_6">
+  <inertial>
+  <mass value="0.137"/>
+  <origin xyz="-0.00706 -0.00017 -1.32E-06" rpy="0 0 0"/>
+  <inertia ixx="0.00284661" ixy="-2.12765E-05" ixz="-1.6435E-05" iyy="0.00401346" iyz="1.31336E-05" izz="0.0052535"/>
+  </inertial>
+  <xacro:visual-collision link_name="link_6" />
+  </link>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- joint - 6 ___ end_effector -->
+  <joint name="joint6-end_effector" type="fixed">
+  <parent link="link_6"/>
+  <child link="end_effector"/>
+  <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+
+  <!-- Description of end_effector -->
+  <link name="end_effector">
+  <inertial>
+  <origin xyz="0 0 0" rpy="0 0 0" />
+  <mass value="0.01"/>
+  <inertia ixx="1e-08" ixy="0" ixz="0" iyy="1e-08" iyz="0" izz="1e-08"/>
+  </inertial>
+
+  <visual>
+  <origin xyz="-0.005 0 0" rpy="0 1.57079632679 0" />
+  <geometry>
+  <mesh filename="package://irb120_description/meshes/visual/simple_endeffector.stl" scale="0.001 0.001 0.001"/>
+  </geometry>
+  <material name="abb_white" />
+  </visual>
+
+  <collision>
+  <origin xyz="0.005 0 0" rpy="0 1.57079632679 0" />
+  <geometry>
+  <mesh filename="package://irb120_description/meshes/collision/simple_endeffector.stl" scale="0.001 0.001 0.001"/>
+  </geometry>
+  </collision>
+  </link>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Transmissions for ROS Control -->
+  <xacro:transmission_block number="1" />
+  <xacro:transmission_block number="2" />
+  <xacro:transmission_block number="3" />
+  <xacro:transmission_block number="4" />
+  <xacro:transmission_block number="5" />
+  <xacro:transmission_block number="6" />
+
+  <!-- ros_control plugin -->
+  <gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+  <robotNamespace>/abb_irb120</robotNamespace>
+  <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+  </plugin>
+  </gazebo>
+
+  <!-- gazebo references -->
+  <gazebo reference="base_link">
+  <material>Gazebo/Orange</material>
+  <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="link_1">
+  <material>Gazebo/Orange</material>
+  <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="link_2">
+  <material>Gazebo/Orange</material>
+  <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="link_3">
+  <material>Gazebo/Orange</material>
+  <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="link_4">
+  <material>Gazebo/Orange</material>
+  <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="link_5">
+  <material>Gazebo/Orange</material>
+  <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="link_6">
+  <material>Gazebo/Black</material>
+  <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+
+</robot>

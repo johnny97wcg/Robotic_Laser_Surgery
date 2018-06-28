@@ -1,0 +1,8 @@
+prefix=/home/halley/sandbox/install
+
+Name: moveit
+Description: Description of moveit
+Version: 0.0.0
+Cflags: -I/home/halley/sandbox/install/include
+Libs: -L/home/halley/sandbox/install/lib 
+Requires: 

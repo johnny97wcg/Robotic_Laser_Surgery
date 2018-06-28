@@ -1,0 +1,8 @@
+prefix=/home/halley/sandbox/install
+
+Name: abb_irb120_moveit_config
+Description: Description of abb_irb120_moveit_config
+Version: 0.3.0
+Cflags: 
+Libs: -L/home/halley/sandbox/install/lib 
+Requires: 

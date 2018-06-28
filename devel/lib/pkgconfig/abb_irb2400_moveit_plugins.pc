@@ -1,0 +1,8 @@
+prefix=/home/halley/sandbox/devel
+
+Name: abb_irb2400_moveit_plugins
+Description: Description of abb_irb2400_moveit_plugins
+Version: 1.2.1
+Cflags: 
+Libs: -L/home/halley/sandbox/devel/lib 
+Requires: moveit_core pluginlib roscpp tf_conversions
