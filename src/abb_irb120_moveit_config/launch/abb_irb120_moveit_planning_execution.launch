@@ -12,7 +12,8 @@
   <!-- the "sim" argument controls whether we connect to a Simulated or Real robot -->
   <!--  - if sim=false, a robot_ip argument is required -->
   <arg name="sim" default="false" />
-  <arg name="robot_ip" unless="$(arg sim)" default="192.168.125.1" />
+  <arg name="rviz" default="false" />
+  <arg name="robot_ip" unless="$(arg sim)"/>
   <arg name="J23_coupled" default="false" />
 
   <!--arg name="limited" default="false"/>
@@ -46,9 +47,11 @@
     <arg name="debug" default="$(arg debug)" /-->
   </include>
 
-  <include file="$(find abb_irb120_moveit_config)/launch/moveit_rviz.launch">
-    <arg name="config" value="true"/>
-  </include>
+  <group if="$(arg rviz)">	
+    <include file="$(find abb_irb120_moveit_config)/launch/moveit_rviz.launch">
+      <arg name="config" value="true"/>
+    </include>
+  </group>	
 
   <!--include file="$(find abb_irb120_moveit_config)/launch/default_warehouse_db.launch" /-->
   <param name="move_group/trajectory_execution/allowed_execution_duration_scaling" value="4.0" />

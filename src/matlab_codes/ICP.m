@@ -16,12 +16,12 @@ workobj_p6 = [125 95 0]';
 workobj_X = [workobj_p1, workobj_p2, workobj_p3, workobj_p4, workobj_p5, workobj_p6];
 
 % move robot to corresponding calibration points and record joint angles
-robot_q1 = [1.54879 -0.88788 -0.49963 0.01240 -0.20336 0.21891];
-robot_q2 = [1.63390 -0.93609 -0.37036 0.01494 -0.28426 0.30108];
-robot_q3 = [1.46855 -0.93930 -0.36315 0.00338 -0.28800 0.14688];
-robot_q4 = [1.55182 -0.99284 -0.23608 0.00738 -0.36137 0.22653];
-robot_q5 = [1.69601 -1.06163 -0.07636 0.01234 -0.45179 0.36660];
-robot_q6 = [1.41435 -1.06829 -0.06105 0.00000 -0.46124 0.09612];
+robot_q1 = [1.54879 0.88788 0.49963 0.01240 0.20336 0.21891];
+robot_q2 = [1.63390 0.93609 0.37036 0.01494 0.28426 0.30108];
+robot_q3 = [1.46855 0.93930 0.36315 0.00338 0.28800 0.14688];
+robot_q4 = [1.55182 0.99284 0.23608 0.00738 0.36137 0.22653];
+robot_q5 = [1.69601 1.06163 0.07636 0.01234 0.45179 0.36660];
+robot_q6 = [1.41435 1.06829 0.06105 0.00000 0.46124 0.09612];
 
 % create a kinematics class object
 kin_obj = Kinematics;
@@ -41,4 +41,5 @@ robot_Y = 1000*[robot_p1, robot_p2, robot_p3, robot_p4, robot_p5, robot_p6];
 HT = [R,t;[0 0 0 1]];
 % save point registeration data to a mat file for furture use
 save('HT.mat', 'HT');
+disp('writing transformation matrix to file');
 

@@ -22,6 +22,12 @@ std_msgs::Float64 joint3_goal;
 std_msgs::Float64 joint4_goal;
 std_msgs::Float64 joint5_goal;
 std_msgs::Float64 joint6_goal;
+geometry_msgs::Point A1, A2, A3, A4;
+geometry_msgs::Point B1, B2, B3, B4;
+geometry_msgs::Point C1, C2, C3, C4;
+vector<geometry_msgs::Point> pointArray;
+void initPoints();
+void setJointGoal(string mode, vector<double> &joint_group_positions);
 
 class MoveitNavigation
 {
@@ -33,18 +39,6 @@ private:
 	ros::Subscriber joint4_sub;
 	ros::Subscriber joint5_sub;
 	ros::Subscriber joint6_sub;
-	geometry_msgs::Point A1;
-	geometry_msgs::Point A2;
-	geometry_msgs::Point A3;
-	geometry_msgs::Point A4;
-	geometry_msgs::Point B1;
-	geometry_msgs::Point B2;
-	geometry_msgs::Point B3;
-	geometry_msgs::Point B4;
-	geometry_msgs::Point C1;
-	geometry_msgs::Point C2;
-	geometry_msgs::Point C3;
-	geometry_msgs::Point C4;
 public:
 	MoveitNavigation(ros::NodeHandle n)
 	{
@@ -63,8 +57,7 @@ public:
 	void Joint5Callback(const std_msgs::Float64 joint5_msg);
 	void Joint6Callback(const std_msgs::Float64 joint6_msg);
 	void pub_local_goal(double x, double y, double z);
+	void pub_point (geometry_msgs::Point point, double dx, double dy, double dz);
 	geometry_msgs::Pose ConstructPose(VectorXd position, VectorXd orientation);
-	void setJointGoal(string mode, vector<double> &joint_group_positions);
-
 
 };

@@ -133,7 +133,7 @@
   <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <!-- Joint - 1 -->
   <joint name="joint_1" type="revolute">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.187"/>
     <parent link="base_link"/>
     <child link="link_1"/>
     <limit effort="100" lower="-2.87979" upper="2.87979" velocity="4.36332"/>
@@ -148,14 +148,14 @@
       <inertia ixx="0.0142175" ixy="-1.28579E-05" ixz="-2.31364E-05" iyy="0.0144041" iyz="1.93404E-05" izz="0.0104533"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.187"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/visual/link_1.stl"/>
       </geometry>
       <material name="abb_orange"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.187"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/collision/link_1.stl"/>
       </geometry>
@@ -164,11 +164,11 @@
   <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <!-- Joint - 2 -->
   <joint name="joint_2" type="revolute">
-    <origin rpy="0 0 0" xyz="0 0 0.29"/>
+    <origin rpy="-1.57079632679 0 0" xyz="0 0 0.103"/>
     <parent link="link_1"/>
     <child link="link_2"/>
     <limit effort="100" lower="-1.91986" upper="1.91986" velocity="4.36332"/>
-    <axis xyz="0 1 0"/>
+    <axis xyz="0 0 1"/>
     <dynamics damping="1" friction="0"/>
   </joint>
   <!-- Description of link - 2 -->
@@ -179,14 +179,14 @@
       <inertia ixx="0.0603111" ixy="9.83431E-06" ixz="5.72407E-05" iyy="0.041569" iyz="-0.00050497" izz="0.0259548"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/visual/link_2.stl"/>
       </geometry>
       <material name="abb_orange"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/collision/link_2.stl"/>
       </geometry>
@@ -195,11 +195,11 @@
   <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <!-- Joint - 3 -->
   <joint name="joint_3" type="revolute">
-    <origin rpy="0 0 0" xyz="0 0 0.27"/>
+    <origin rpy="0 0 0" xyz="0 -0.27 0"/>
     <parent link="link_2"/>
     <child link="link_3"/>
     <limit effort="100" lower="-1.91986" upper="1.22173" velocity="4.36332"/>
-    <axis xyz="0 1 0"/>
+    <axis xyz="0 0 1"/>
     <dynamics damping="1" friction="0.0"/>
   </joint>
   <!-- Description of link - 3 -->
@@ -210,14 +210,14 @@
       <inertia ixx="0.00835606" ixy="-8.01545E-05" ixz="0.00142884" iyy="0.016713" iyz="-0.000182227" izz="0.0126984"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/visual/link_3.stl"/>
       </geometry>
       <material name="abb_orange"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/collision/link_3.stl"/>
       </geometry>
@@ -226,11 +226,11 @@
   <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <!-- Joint - 4 -->
   <joint name="joint_4" type="revolute">
-    <origin rpy="0 0 0" xyz="0 0 0.07"/>
+    <origin rpy="0 1.57079632679 0" xyz="0 -0.07 0"/>
     <parent link="link_3"/>
     <child link="link_4"/>
     <limit effort="20" lower="-2.79253" upper="2.79253" velocity="5.58505"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 0 1"/>
     <dynamics damping="1" friction="0"/>
   </joint>
   <!--  Description of link - 4 -->
@@ -241,14 +241,14 @@
       <inertia ixx="0.00284661" ixy="-2.12765E-05" ixz="-1.6435E-05" iyy="0.00401346" iyz="1.31336E-05" izz="0.0052535"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57079632679 -1.57079632679 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/visual/link_4.stl"/>
       </geometry>
       <material name="abb_orange"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57079632679 -1.57079632679 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/collision/link_4.stl"/>
       </geometry>
@@ -257,11 +257,11 @@
   <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <!-- Joint - 5 -->
   <joint name="joint_5" type="revolute">
-    <origin rpy="0 0 0" xyz="0.302 0 0"/>
+    <origin rpy="0 -1.57079632679 0" xyz="0 0 0.302"/>
     <parent link="link_4"/>
     <child link="link_5"/>
     <limit effort="20" lower="-2.094395" upper="2.094395" velocity="5.58505"/>
-    <axis xyz="0 1 0"/>
+    <axis xyz="0 0 1"/>
     <dynamics damping="1" friction="0.0"/>
   </joint>
   <!-- Description of link - 5-->
@@ -272,14 +272,14 @@
       <inertia ixx="0.00284661" ixy="-2.12765E-05" ixz="-1.6435E-05" iyy="0.00401346" iyz="1.31336E-05" izz="0.0052535"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/visual/link_5.stl"/>
       </geometry>
       <material name="abb_orange"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/collision/link_5.stl"/>
       </geometry>
@@ -288,11 +288,11 @@
   <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <!-- Joint - 6 -->
   <joint name="joint_6" type="revolute">
-    <origin rpy="0 0 0" xyz="0.072 0 0"/>
+    <origin rpy="0 1.57079632679 0" xyz="0.072 0 0"/>
     <parent link="link_5"/>
     <child link="link_6"/>
     <limit effort="20" lower="-6.98132" upper="6.98132" velocity="7.33038"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 0 1"/>
     <dynamics damping="1" friction="0.0"/>
   </joint>
   <!-- Description of link - 6 -->
@@ -303,14 +303,14 @@
       <inertia ixx="0.00284661" ixy="-2.12765E-05" ixz="-1.6435E-05" iyy="0.00401346" iyz="1.31336E-05" izz="0.0052535"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="-1.57079632679 -1.57079632679 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/visual/link_6.stl"/>
       </geometry>
       <material name="abb_orange"/>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="-1.57079632679 -1.57079632679 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/collision/link_6.stl"/>
       </geometry>
@@ -321,7 +321,7 @@
   <joint name="joint6-end_effector" type="fixed">
     <parent link="link_6"/>
     <child link="end_effector"/>
-    <origin rpy="0 0 0" xyz="0.082 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.082"/>
   </joint>
   <!-- Description of end_effector -->
   <link name="end_effector">
@@ -331,14 +331,14 @@
       <inertia ixx="1e-08" ixy="0" ixz="0" iyy="1e-08" iyz="0" izz="1e-08"/>
     </inertial>
     <visual>
-      <origin rpy="0 1.57079632679 0" xyz="-0.087 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.087"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/visual/simple_endeffector.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="abb_white"/>
     </visual>
     <collision>
-      <origin rpy="0 1.57079632679 0" xyz="-0.087 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.087"/>
       <geometry>
         <mesh filename="package://irb120_description/meshes/collision/simple_endeffector.stl" scale="0.001 0.001 0.001"/>
       </geometry>
