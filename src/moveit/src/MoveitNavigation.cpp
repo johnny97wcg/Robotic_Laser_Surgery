@@ -4,13 +4,13 @@
 //Move It header files
 #include<MoveitNavigation.h>
 
-void initPoints()
+void initPoints(vector<geometry_msgs::Point> &pointArray)
 {
 	A1.x = 110; A1.y = 20; A1.z = 7.5;
 	A2.x = 80; A2.y = 20; A2.z = 7.5;
 	A3.x = 50; A3.y = 20; A3.z = 7.5;
 	A4.x = 20; A4.y = 20; A4.z = 7.5;
-	B1.x = 110; B1.y = 20; B1.z = 7.5;
+	B1.x = 110; B1.y = 50; B1.z = 7.5;
 	B2.x = 80; B2.y = 50; B2.z = 7.5;
 	B3.x = 50; B3.y = 50; B3.z = 7.5;
 	B4.x = 20; B4.y = 50; B4.z = 7.5;
@@ -33,7 +33,7 @@ void initPoints()
 }
 
 //construct a pose object, enter position xyz and orientation wxyz
-geometry_msgs::Pose MoveitNavigation::ConstructPose(VectorXd position, VectorXd orientation)
+geometry_msgs::Pose ConstructPose(VectorXd position, VectorXd orientation)
 {
 	geometry_msgs::Pose goal;
 	goal.position.x = position(0);
@@ -81,6 +81,7 @@ void MoveitNavigation::pub_local_goal(double x, double y, double z)
 		cout << "point sent";
 }
 
+//publish a predefined point to matlab for IK calculation
 void MoveitNavigation::pub_point (geometry_msgs::Point point, double dx, double dy, double dz)
 {
 	point.x += dx;
@@ -90,6 +91,7 @@ void MoveitNavigation::pub_point (geometry_msgs::Point point, double dx, double 
 	cout << "point sent" << endl;
 }
 
+// choose the motion goal as home(all zeros), or the subscribed goal from matlab
 void setJointGoal(string mode, vector<double> &joint_group_positions)
 {
 	if (mode.compare("home") == 0)
@@ -124,7 +126,7 @@ int main(int argc, char** argv)
 	ros::Rate loop_rate(1);
 	spinner.start();
   MoveitNavigation nav_obj(node_handle);
-	initPoints();
+	initPoints(pointArray);
 
 	//select planning group (defined in moveit_setup_assistant)
 	static const string PLANNING_GROUP = "manipulator";
@@ -142,6 +144,8 @@ int main(int argc, char** argv)
 	//initialize joint_group_positions
 	vector<double> joint_group_positions;
 	current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
+	//set joint goal tolerance to 0.01 rad //not using cuz it's worse than default :(
+	//move_group.setGoalJointTolerance(0.01);
 
 	/*
 	// //Visualization in RViz
@@ -163,25 +167,25 @@ int main(int argc, char** argv)
 	char input;
 	int counter;
   counter = 0;
-	cout<< "waiting for keyboard input" <<endl;
+	cout<< "waiting for keyboard input (y/n)" <<endl;
 	while(cin >> input)
 	{
 		cout << "input :" << input << endl;
-		if (strcmp(&input,"n") == 0)
+		if (input == 'n' || counter >= 24)
 		{
 			break;
 		}
 
-		else if (strcmp(&input,"y") == 0)
+		else if (input == 'y' && counter < 24)
 		{
 			cout << "moving to next location" << endl;
 			if (counter%2 == 0)
 			{
-				nav_obj.pub_point(pointArray[counter/2],-10,0,5); // cutting start location
+				nav_obj.pub_point(pointArray[counter/2],8,0,7); // cutting start location
 			}
 			else
 			{
-				nav_obj.pub_point(pointArray[counter/2],10,0,5); // cutting end location
+				nav_obj.pub_point(pointArray[counter/2],-8,0,7); // cutting end location
 			}
 			flag = true;
 			while (flag) // wait for matlab
@@ -193,8 +197,14 @@ int main(int argc, char** argv)
 			// sending joint Angles
 			setJointGoal("goal", joint_group_positions); // helper function that sets the joint space goal
 			move_group.setJointValueTarget(joint_group_positions);
+			if (counter == 1)
+			{
+				// restrict the max speed and acceleation (1% of actual max)
+				move_group.setMaxAccelerationScalingFactor(0.01);
+				move_group.setMaxVelocityScalingFactor(0.01);
+			}
 			moveit::planning_interface::MoveItErrorCode success = move_group.plan(my_plan);
-			ROS_INFO_NAMED("Visualizing plan 2 (joint space goal) %s", success ? "SUCCESS":"FAILED");
+			ROS_INFO_NAMED("Visualizing plan 1 (joint space goal) %s", success ? "SUCCESS":"FAILED");
 			move_group.execute(my_plan);
 			counter ++;
 			cout << "motion "<< counter <<" finished, waiting for next input"<<endl;
@@ -234,7 +244,7 @@ int main(int argc, char** argv)
 	// orientation1(1) = -0.5;
 	// orientation1(2) = 0.5;
 	// orientation1(3) = 0.5;
-	// geometry_msgs::Pose pose1 = nav_obj.ConstructPose(position1,orientation1);
+	// geometry_msgs::Pose pose1 = ConstructPose(position1,orientation1);
 	// cout << "goal pose " << pose1;
 	// //set pose target
 	// move_group.setPoseTarget(pose1);
@@ -259,6 +269,9 @@ int main(int argc, char** argv)
 	cout << "returning to home position" << endl;
 	setJointGoal("home", joint_group_positions);
 	move_group.setJointValueTarget(joint_group_positions);
+	// reset the max speed and acceleation (100% of actual max)
+	move_group.setMaxAccelerationScalingFactor(1.0);
+	move_group.setMaxVelocityScalingFactor(1.0);
 	moveit::planning_interface::MoveItErrorCode success = move_group.plan(my_plan);
 	ROS_INFO_NAMED("Visualizing plan 2 (joint space goal) %s", success ? "SUCCESS":"FAILED");
 	move_group.execute(my_plan);

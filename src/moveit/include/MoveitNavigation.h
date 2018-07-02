@@ -26,8 +26,9 @@ geometry_msgs::Point A1, A2, A3, A4;
 geometry_msgs::Point B1, B2, B3, B4;
 geometry_msgs::Point C1, C2, C3, C4;
 vector<geometry_msgs::Point> pointArray;
-void initPoints();
+void initPoints(vector<geometry_msgs::Point> &SpointArray);
 void setJointGoal(string mode, vector<double> &joint_group_positions);
+geometry_msgs::Pose ConstructPose(VectorXd position, VectorXd orientation);
 
 class MoveitNavigation
 {
@@ -58,6 +59,5 @@ public:
 	void Joint6Callback(const std_msgs::Float64 joint6_msg);
 	void pub_local_goal(double x, double y, double z);
 	void pub_point (geometry_msgs::Point point, double dx, double dy, double dz);
-	geometry_msgs::Pose ConstructPose(VectorXd position, VectorXd orientation);
 
 };
