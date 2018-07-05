@@ -50,8 +50,7 @@ geometry_msgs::Pose ConstructPose(VectorXd position, VectorXd orientation)
 void MoveitNavigation::Joint1Callback(const std_msgs::Float64 joint1_msg)
 {
 	joint1_goal.data = joint1_msg.data;
-}
-void MoveitNavigation::Joint2Callback(const std_msgs::Float64 joint2_msg)
+}void MoveitNavigation::Joint2Callback(const std_msgs::Float64 joint2_msg)
 {
 	joint2_goal.data = joint2_msg.data;
 }void MoveitNavigation::Joint3Callback(const std_msgs::Float64 joint3_msg)
@@ -144,8 +143,6 @@ int main(int argc, char** argv)
 	//initialize joint_group_positions
 	vector<double> joint_group_positions;
 	current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
-	//set joint goal tolerance to 0.01 rad //not using cuz it's worse than default :(
-	//move_group.setGoalJointTolerance(0.01);
 
 	/*
 	// //Visualization in RViz
@@ -171,22 +168,49 @@ int main(int argc, char** argv)
 	while(cin >> input)
 	{
 		cout << "input :" << input << endl;
-		if (input == 'n' || counter >= 24)
+		if (input == 'n' || counter >= 36)
 		{
 			break;
 		}
 
-		else if (input == 'y' && counter < 24)
+		else if (input == 'y' && counter < 36)
 		{
 			cout << "moving to next location" << endl;
-			if (counter%2 == 0)
-			{
-				nav_obj.pub_point(pointArray[counter/2],8,0,7); // cutting start location
+			// setting point goal in the workobject	reference frame
+			if (counter < 8)
+			{ // first row, single pass, left->right
+				if (counter%2 == 0) // 1
+				{
+					nav_obj.pub_point(pointArray[counter/2],8,0,7); // left
+				}
+				else // 2
+				{
+					nav_obj.pub_point(pointArray[counter/2],-8,0,7); // right
+				}
+			}
+			else if (8 <= counter && counter , counter < 20)
+			{ // second row, double pass, left->right->left
+				if ((counter-8)%3 == 1) // 2
+				{
+					nav_obj.pub_point(pointArray[4+(counter-8)/3],-8,0,7); // right
+				}
+				else // 1, 3
+				{
+					nav_obj.pub_point(pointArray[4+(counter-8)/3],8,0,7); // left
+				}
 			}
 			else
-			{
-				nav_obj.pub_point(pointArray[counter/2],-8,0,7); // cutting end location
+			{ // second row, double pass, left->right->left->right
+				if ((counter-20)%4%2 == 0) // 1, 3
+				{
+					nav_obj.pub_point(pointArray[8+(counter-20)/4],8,0,7); // left
+				}
+				else // 2, 4
+				{
+					nav_obj.pub_point(pointArray[8+(counter-20)/4],-8,0,7); // right
+				}
 			}
+
 			flag = true;
 			while (flag) // wait for matlab
 			{
@@ -194,17 +218,43 @@ int main(int argc, char** argv)
 				ros::spinOnce();
 				loop_rate.sleep();
 			}
+
 			// sending joint Angles
 			setJointGoal("goal", joint_group_positions); // helper function that sets the joint space goal
 			move_group.setJointValueTarget(joint_group_positions);
-			if (counter == 1)
+			if (counter == 1 ) //&& counter == 9 && counter == 21
 			{
-				// restrict the max speed and acceleation (1% of actual max)
+				// restrict the max speed and acceleation for short dist motion (1% of actual max)
 				move_group.setMaxAccelerationScalingFactor(0.01);
 				move_group.setMaxVelocityScalingFactor(0.01);
 			}
+			// else if (counter == 8 && counter == 20)
+			// {
+			// 	// restrict the max speed and acceleation for long dist motion (10% of actual max)
+			// 	move_group.setMaxAccelerationScalingFactor(0.1);
+			// 	move_group.setMaxVelocityScalingFactor(0.1);
+			// }
+
 			moveit::planning_interface::MoveItErrorCode success = move_group.plan(my_plan);
 			ROS_INFO_NAMED("Visualizing plan 1 (joint space goal) %s", success ? "SUCCESS":"FAILED");
+
+			// moveit_msgs::RobotTrajectory traj;
+			// traj = my_plan.trajectory_;
+			// cout << "trajectory \n" << traj << endl;
+
+			/*
+			robot_model_loader::RobotModelLoader robot_model_loader("robot_description");
+			robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
+			robot_state::RobotStatePtr kinematic_state(new robot_state::RobotState(kinematic_model));
+			kinematic_state->setToDefaultValues();
+			kinematic_state->setToRandomPositions(joint_model_group);
+			//kinematic_state->setJointGroupPositions(joint_model_group, joint_values);
+			const Eigen::Affine3d& end_effector_state = kinematic_state->getGlobalLinkTransform("end_effector");
+			// Print end-effector pose. Remember that this is in the model frame
+			ROS_INFO_STREAM("Translation: \n" << end_effector_state.translation() << "\n");
+			ROS_INFO_STREAM("Rotation: \n" << end_effector_state.rotation() << "\n");
+			*/
+
 			move_group.execute(my_plan);
 			counter ++;
 			cout << "motion "<< counter <<" finished, waiting for next input"<<endl;
@@ -232,18 +282,17 @@ int main(int argc, char** argv)
 	// nav_obj.pub_point(A1,dx,dy,dz);
 
 
-
 	/*
 	// sending nav pose
 	// VectorXd position1(3);
-	// position1(0) = -0.01;
-	// position1(1) = 0.36;
-	// position1(2) = 0.63;
+	// position1(0) = 0.3;
+	// position1(1) = 0.0;
+	// position1(2) = 0.5;
 	// VectorXd orientation1(4);
-	// orientation1(0) = 0.5;
-	// orientation1(1) = -0.5;
-	// orientation1(2) = 0.5;
-	// orientation1(3) = 0.5;
+	// orientation1(0) = 0;
+	// orientation1(1) = 0;
+	// orientation1(2) = 0;
+	// orientation1(3) = 1;
 	// geometry_msgs::Pose pose1 = ConstructPose(position1,orientation1);
 	// cout << "goal pose " << pose1;
 	// //set pose target
@@ -251,8 +300,8 @@ int main(int argc, char** argv)
 	// ///Motion plan from current location to custom position
 	// moveit::planning_interface::MoveItErrorCode success1 = move_group.plan(my_plan);
 	// ROS_INFO_NAMED("abb_irb120","Visualizing plan 1 (pose goal)%s",success1?"SUCCESS":"FAILED");
+	// move_group.execute(my_plan);
   */
-
 
 	/*
 	// // Visualizing plans
