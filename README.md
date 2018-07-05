@@ -1,5 +1,6 @@
 # Robotic_Laser_Surgery Project
-project description here
+This is an undergraduate summer research project at WPI with professor Loris Fichera, on the subject of robotic control of laser and study of laser incisions on agar gels. This is a preliminary study as part of a joint project involving infered thermal imaging, minimally invasive continuum endoscope and etc. For more information, please visit ![WPI COMETLAB](https://www.wpicometlab.com/).
+
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -15,15 +16,25 @@ MATLAB: R2018a
 ### Installing
 ```
 Eigen : http://eigen.tuxfamily.org/index.php?title=Main_Page
-ros-controllers : $ sudo apt-get install ros-indigo-gazebo-ros-pkgs ros-indigo-gazebo-ros-control
 MoveIt!: $ sudo apt-get install ros-kinetic-moveit
 ```
 
+### Initial Setup
+#### clone this git repo locally, setup catkin workspace, and source the path
+	$ git clone https://github.com/johnny97wcg/Robotic_Laser_Surgery
+	$ catkin_make 
+	$ source devel/setup.bash
+	
+#### on Windows computer, download RobotStudio and load ROS packages into robot controller
+**Note** this process has already been done on the ABB IRB robot in the AIM lab, no need to repeat if using the same robot.
+Otherwise, please follow the ROS Tutorials: ![Install RAPID Files](http://wiki.ros.org/abb/Tutorials/RobotStudio), ![Install ROS Server](http://wiki.ros.org/abb/Tutorials/InstallServer), ![Running ROS Server](http://wiki.ros.org/abb/Tutorials/RunServer).
+Afterwards the robot controller should have a file structure similar to the one shown in the screenshot below (also viewable on the flexpendant). 
+
+If the files are deleted accidently, here is a link to the ![backup file](INSERT LINK HERE). 
+
+
 ## Running the program
 
-#### clone this git repo locally and setup catkin workspace
-	$ git clone https://github.com/johnny97wcg/Robotic_Laser_Surgery
-	$ catkin_make
 # 2. start ros core 
 	$ roscore
 # 3. launch moveit planning interface
