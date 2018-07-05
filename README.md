@@ -17,9 +17,8 @@ ROS: Kinetic Kame
 	$ roscore
 # 3. launch moveit planning interface
 by default robot ip is 192.168.125.1, adjust accordingly
-
 set argument 'rviz' to true to enable moveit planner GUI in rviz, only if needed 
-	$ roslaunch abb_irb120_moveit_config abb_irb120_moveit_planning_execution.launch  robot_ip:="192.168.125.1" rviz:="true"
+	``$ roslaunch abb_irb120_moveit_config abb_irb120_moveit_planning_execution.launch  robot_ip:="192.168.125.1" rviz:="true"``
 	
 # 4. start matlab
 	# launch matlab from terminal 
