@@ -28,7 +28,7 @@ clone this git repo locally, setup catkin workspace, and source the path
 #### on Windows computer, download RobotStudio and load ROS packages into robot controller
 **Note** This process has already been done on the ABB IRB robot in the AIM lab, no need to repeat if using the same robot.
 Otherwise, please follow the ROS Tutorials: [Install RAPID Files](http://wiki.ros.org/abb/Tutorials/RobotStudio), [Install ROS Server](http://wiki.ros.org/abb/Tutorials/InstallServer), [Running ROS Server](http://wiki.ros.org/abb/Tutorials/RunServer).
-Afterwards the robot controller should have a file structure similar to the one shown in the ![screenshot](/Others/RobotStudio_Screenshot.PNG?raw=false) (also viewable on the flexpendant). 
+Afterwards the robot controller should have a file structure similar to the one shown in the [screenshot](/Others/RobotStudio_Screenshot.PNG) (also viewable on the flexpendant). 
 
 If the files are deleted accidently, here is a link to the [backup file](/Others/System1_BACKUP_2018-06-20). Use the 'restore from backup' function in RS to reload the files onto the controller.
 
