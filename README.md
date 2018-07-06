@@ -20,7 +20,7 @@ MoveIt!: $ sudo apt-get install ros-kinetic-moveit
 ```
 ### Repository Overview
 Here is the outline of this repository and notes on how to replicate some of the folder contents.
-- **/Others** folder is for online backup and displaying image only, no need to clone for project development (there is a .gitignore file in place to prevent this from cloning).
+- **/Others** folder is for online backup and displaying image only, no need to clone for project development.
 
 - **/src/abb** folder includes ABB ROS drivers that enables communication with the ABB robot through ROS, see [abb_drivers](http://wiki.ros.org/abb_driver) for more information or version updates. 
 
