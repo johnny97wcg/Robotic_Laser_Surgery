@@ -1,5 +1,5 @@
 # Robotic_Laser_Surgery Project
-This is an undergraduate summer research project at WPI with professor Loris Fichera, on the subject of robotic control of laser and study of laser incisions on agar gels. This is a preliminary study as part of a joint project involving infered thermal imaging, minimally invasive continuum endoscope and etc. For more information, please visit ![WPI COMETLAB](https://www.wpicometlab.com/).
+This is an undergraduate summer research project at WPI with professor Loris Fichera, on the subject of robotic control of laser and study of laser incisions on agar gels. This is a preliminary study as part of a joint project involving infered thermal imaging, minimally invasive continuum endoscope and etc. For more information, please visit [WPI COMETLAB](https://www.wpicometlab.com/).
 
 
 ## Getting Started
@@ -27,10 +27,10 @@ clone this git repo locally, setup catkin workspace, and source the path
 	$ source devel/setup.bash	
 #### on Windows computer, download RobotStudio and load ROS packages into robot controller
 **Note** This process has already been done on the ABB IRB robot in the AIM lab, no need to repeat if using the same robot.
-Otherwise, please follow the ROS Tutorials: ![Install RAPID Files](http://wiki.ros.org/abb/Tutorials/RobotStudio), ![Install ROS Server](http://wiki.ros.org/abb/Tutorials/InstallServer), ![Running ROS Server](http://wiki.ros.org/abb/Tutorials/RunServer).
+Otherwise, please follow the ROS Tutorials: [Install RAPID Files](http://wiki.ros.org/abb/Tutorials/RobotStudio), [Install ROS Server](http://wiki.ros.org/abb/Tutorials/InstallServer), [Running ROS Server](http://wiki.ros.org/abb/Tutorials/RunServer).
 Afterwards the robot controller should have a file structure similar to the one shown in the ![screenshot](/Others/RobotStudio_Screenshot) (also viewable on the flexpendant). 
 
-If the files are deleted accidently, here is a link to the ![backup file](/Others/System1_BACKUP_2018-06-20). Use the 'restore from backup' function in RS to reload the files onto the controller.
+If the files are deleted accidently, here is a link to the [backup file](/Others/System1_BACKUP_2018-06-20). Use the 'restore from backup' function in RS to reload the files onto the controller.
 
 
 ## Running the program
