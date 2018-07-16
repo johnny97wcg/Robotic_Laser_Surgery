@@ -19,6 +19,8 @@ moveit/move_group_interface/move_group_interface.h
 -
 moveit/planning_scene_interface/planning_scene_interface.h
 -
+moveit/trajectory_processing/iterative_time_parameterization.h
+-
 moveit_msgs/DisplayRobotState.h
 -
 moveit_msgs/DisplayTrajectory.h
@@ -34,6 +36,8 @@ geometry_msgs/Pose.h
 geometry_msgs/Point.h
 -
 std_msgs/Float64.h
+-
+std_msgs/String.h
 -
 
 /home/halley/sandbox/src/moveit/src/MoveitNavigation.cpp
@@ -1152,6 +1156,16 @@ moveit_msgs/RobotTrajectory.h
 moveit_msgs/RobotState.h
 -
 deque
+-
+
+/opt/ros/kinetic/include/moveit/trajectory_processing/iterative_time_parameterization.h
+trajectory_msgs/JointTrajectory.h
+-
+moveit_msgs/JointLimits.h
+-
+moveit_msgs/RobotState.h
+-
+moveit/robot_trajectory/robot_trajectory.h
 -
 
 /opt/ros/kinetic/include/moveit/transforms/transforms.h
@@ -3187,6 +3201,22 @@ ros/message_operations.h
 -
 
 /opt/ros/kinetic/include/std_msgs/Header.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
+/opt/ros/kinetic/include/std_msgs/String.h
 string
 -
 vector

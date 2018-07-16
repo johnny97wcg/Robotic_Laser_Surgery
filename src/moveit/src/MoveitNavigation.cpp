@@ -6,18 +6,18 @@
 
 void initPoints(vector<geometry_msgs::Point> &pointArray)
 {
-	A1.x = 110; A1.y = 20; A1.z = 7.5;
-	A2.x = 80; A2.y = 20; A2.z = 7.5;
-	A3.x = 50; A3.y = 20; A3.z = 7.5;
-	A4.x = 20; A4.y = 20; A4.z = 7.5;
-	B1.x = 110; B1.y = 50; B1.z = 7.5;
-	B2.x = 80; B2.y = 50; B2.z = 7.5;
-	B3.x = 50; B3.y = 50; B3.z = 7.5;
-	B4.x = 20; B4.y = 50; B4.z = 7.5;
-	C1.x = 110; C1.y = 80; C1.z = 7.5;
-	C2.x = 80; C2.y = 80; C2.z = 7.5;
-	C3.x = 50; C3.y = 80; C3.z = 7.5;
-	C4.x = 20; C4.y = 80; C4.z = 7.5;
+	A1.x = 110; A1.y = 20; A1.z = 12;
+	A2.x = 80; A2.y = 20; A2.z = 12;
+	A3.x = 50; A3.y = 20; A3.z = 12;
+	A4.x = 20; A4.y = 20; A4.z = 12;
+	B1.x = 110; B1.y = 50; B1.z = 12;
+	B2.x = 80; B2.y = 50; B2.z = 12;
+	B3.x = 50; B3.y = 50; B3.z = 12;
+	B4.x = 20; B4.y = 50; B4.z = 12;
+	C1.x = 110; C1.y = 80; C1.z = 12;
+	C2.x = 80; C2.y = 80; C2.z = 12;
+	C3.x = 50; C3.y = 80; C3.z = 12;
+	C4.x = 20; C4.y = 80; C4.z = 12;
 	pointArray.push_back(A1);
 	pointArray.push_back(A2);
 	pointArray.push_back(A3);
@@ -30,20 +30,6 @@ void initPoints(vector<geometry_msgs::Point> &pointArray)
 	pointArray.push_back(C2);
 	pointArray.push_back(C3);
 	pointArray.push_back(C4);
-}
-
-//construct a pose object, enter position xyz and orientation wxyz
-geometry_msgs::Pose ConstructPose(VectorXd position, VectorXd orientation)
-{
-	geometry_msgs::Pose goal;
-	goal.position.x = position(0);
-	goal.position.y = position(1);
-	goal.position.z = position(2);
-	goal.orientation.w = orientation(3);
-	goal.orientation.x = orientation(0);
-	goal.orientation.y = orientation(1);
-	goal.orientation.z = orientation(2);
-	return goal;
 }
 
 // subscribe callback functions for each joint
@@ -65,7 +51,7 @@ void MoveitNavigation::Joint1Callback(const std_msgs::Float64 joint1_msg)
 }void MoveitNavigation::Joint6Callback(const std_msgs::Float64 joint6_msg)
 {
 	joint6_goal.data = joint6_msg.data;
-	flag = false;
+	flag = false; //after all joint goals received, reset flag value
 	cout << "joint goals received" << endl;
 }
 
@@ -115,6 +101,20 @@ void setJointGoal(string mode, vector<double> &joint_group_positions)
 	{
 		cout << "mode not recognized, please type 'home' for home position or 'goal' for joint space goal." << endl;
 	}
+}
+
+void MoveitNavigation::laserOn(void)
+{
+	laser.data = "on";
+	cout << "laser Activated" << endl;
+	arduino_pub.publish(laser);
+}
+
+void MoveitNavigation::laserOff(void)
+{
+	laser.data = "off";
+	cout << "laser Deactivated" << endl;
+	arduino_pub.publish(laser);
 }
 
 int main(int argc, char** argv)
@@ -168,12 +168,12 @@ int main(int argc, char** argv)
 	while(cin >> input)
 	{
 		cout << "input :" << input << endl;
-		if (input == 'n' || counter >= 36)
+		if (input == 'n' || counter >= 24)
 		{
 			break;
 		}
 
-		else if (input == 'y' && counter < 36)
+		else if (input == 'y' && counter < 24)
 		{
 			cout << "moving to next location" << endl;
 			// setting point goal in the workobject	reference frame
@@ -181,33 +181,33 @@ int main(int argc, char** argv)
 			{ // first row, single pass, left->right
 				if (counter%2 == 0) // 1
 				{
-					nav_obj.pub_point(pointArray[counter/2],8,0,7); // left
+					nav_obj.pub_point(pointArray[counter/2],8,0,2); // left
 				}
 				else // 2
 				{
-					nav_obj.pub_point(pointArray[counter/2],-8,0,7); // right
+					nav_obj.pub_point(pointArray[counter/2],-8,0,2); // right
 				}
 			}
-			else if (8 <= counter && counter , counter < 20)
+			else if (8 <= counter && counter , counter < 16)
 			{ // second row, double pass, left->right->left
-				if ((counter-8)%3 == 1) // 2
+				if ((counter-8)%2 == 1) // 2
 				{
-					nav_obj.pub_point(pointArray[4+(counter-8)/3],-8,0,7); // right
+					nav_obj.pub_point(pointArray[4+(counter-8)/2],-8,0,2); // right
 				}
 				else // 1, 3
 				{
-					nav_obj.pub_point(pointArray[4+(counter-8)/3],8,0,7); // left
+					nav_obj.pub_point(pointArray[4+(counter-8)/2],8,0,2); // left
 				}
 			}
 			else
 			{ // second row, double pass, left->right->left->right
-				if ((counter-20)%4%2 == 0) // 1, 3
+				if ((counter-16)%2 == 0) // 1, 3
 				{
-					nav_obj.pub_point(pointArray[8+(counter-20)/4],8,0,7); // left
+					nav_obj.pub_point(pointArray[8+(counter-16)/2],8,0,2); // left
 				}
 				else // 2, 4
 				{
-					nav_obj.pub_point(pointArray[8+(counter-20)/4],-8,0,7); // right
+					nav_obj.pub_point(pointArray[8+(counter-16)/2],-8,0,2); // right
 				}
 			}
 
@@ -222,40 +222,33 @@ int main(int argc, char** argv)
 			// sending joint Angles
 			setJointGoal("goal", joint_group_positions); // helper function that sets the joint space goal
 			move_group.setJointValueTarget(joint_group_positions);
-			if (counter == 1 ) //&& counter == 9 && counter == 21
+			if (counter == 1 || counter == 9 || counter == 17) //set speed for each section
 			{
 				// restrict the max speed and acceleation for short dist motion (1% of actual max)
 				move_group.setMaxAccelerationScalingFactor(0.01);
 				move_group.setMaxVelocityScalingFactor(0.01);
 			}
-			// else if (counter == 8 && counter == 20)
-			// {
-			// 	// restrict the max speed and acceleation for long dist motion (10% of actual max)
-			// 	move_group.setMaxAccelerationScalingFactor(0.1);
-			// 	move_group.setMaxVelocityScalingFactor(0.1);
-			// }
+			else if (counter == 8 || counter == 16)
+			{
+				// restrict the max speed and acceleation for long dist motion (10% of actual max)
+				move_group.setMaxAccelerationScalingFactor(0.1);
+				move_group.setMaxVelocityScalingFactor(0.1);
+			}
 
 			moveit::planning_interface::MoveItErrorCode success = move_group.plan(my_plan);
 			ROS_INFO_NAMED("Visualizing plan 1 (joint space goal) %s", success ? "SUCCESS":"FAILED");
+			if (counter%2 == 1)
+			{
+				nav_obj.laserOn(); // activate the laser for 1 sec
+				move_group.execute(my_plan);
+				sleep(0.5);
+				nav_obj.laserOff();
+			}
 
-			// moveit_msgs::RobotTrajectory traj;
-			// traj = my_plan.trajectory_;
-			// cout << "trajectory \n" << traj << endl;
-
-			/*
-			robot_model_loader::RobotModelLoader robot_model_loader("robot_description");
-			robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
-			robot_state::RobotStatePtr kinematic_state(new robot_state::RobotState(kinematic_model));
-			kinematic_state->setToDefaultValues();
-			kinematic_state->setToRandomPositions(joint_model_group);
-			//kinematic_state->setJointGroupPositions(joint_model_group, joint_values);
-			const Eigen::Affine3d& end_effector_state = kinematic_state->getGlobalLinkTransform("end_effector");
-			// Print end-effector pose. Remember that this is in the model frame
-			ROS_INFO_STREAM("Translation: \n" << end_effector_state.translation() << "\n");
-			ROS_INFO_STREAM("Rotation: \n" << end_effector_state.rotation() << "\n");
-			*/
-
-			move_group.execute(my_plan);
+			else
+			{
+				move_group.execute(my_plan);
+			}
 			counter ++;
 			cout << "motion "<< counter <<" finished, waiting for next input"<<endl;
 		}
@@ -281,28 +274,6 @@ int main(int argc, char** argv)
 	// dz = 5;
 	// nav_obj.pub_point(A1,dx,dy,dz);
 
-
-	/*
-	// sending nav pose
-	// VectorXd position1(3);
-	// position1(0) = 0.3;
-	// position1(1) = 0.0;
-	// position1(2) = 0.5;
-	// VectorXd orientation1(4);
-	// orientation1(0) = 0;
-	// orientation1(1) = 0;
-	// orientation1(2) = 0;
-	// orientation1(3) = 1;
-	// geometry_msgs::Pose pose1 = ConstructPose(position1,orientation1);
-	// cout << "goal pose " << pose1;
-	// //set pose target
-	// move_group.setPoseTarget(pose1);
-	// ///Motion plan from current location to custom position
-	// moveit::planning_interface::MoveItErrorCode success1 = move_group.plan(my_plan);
-	// ROS_INFO_NAMED("abb_irb120","Visualizing plan 1 (pose goal)%s",success1?"SUCCESS":"FAILED");
-	// move_group.execute(my_plan);
-  */
-
 	/*
 	// // Visualizing plans
   // // We can also visualize the plan as a line with markers in RViz.
@@ -313,6 +284,14 @@ int main(int argc, char** argv)
   // visual_tools.trigger();
   // visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
   */
+
+	// move_group.setRandomTarget();
+	// moveit::planning_interface::MoveItErrorCode success = move_group.plan(my_plan);
+	// ROS_INFO_NAMED("Visualizing plan 2 (joint space goal) %s", success ? "SUCCESS":"FAILED");
+	// moveit_msgs::RobotTrajectory traj;
+	// traj = my_plan.trajectory_;
+	// cout << "trajectory \n" << traj << endl;
+
 
 	// return to home position before shutdown
 	cout << "returning to home position" << endl;

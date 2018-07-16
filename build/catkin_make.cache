@@ -1,2 +1,2 @@
-abb/abb:abb/abb_driver:abb/abb_irb2400_moveit_config:abb/abb_irb2400_moveit_plugins:abb/abb_irb2400_support:abb/abb_irb4400_support:abb/abb_irb5400_support:abb/abb_irb6600_support:abb/abb_irb6640_moveit_config:abb/abb_irb6640_support:abb/abb_resources:abb_irb120_moveit_config:irb120_description:moveit
+abb_driver:abb_irb120_moveit_config:irb120_description:moveit
 -DCATKIN_DEVEL_PREFIX=/home/halley/sandbox/devel -DCMAKE_INSTALL_PREFIX=/home/halley/sandbox/install -G Unix Makefiles

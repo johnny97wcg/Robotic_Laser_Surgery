@@ -4,6 +4,7 @@
 #include <ros/ros.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include <moveit/trajectory_processing/iterative_time_parameterization.h>
 #include <moveit_msgs/DisplayRobotState.h>
 #include <moveit_msgs/DisplayTrajectory.h>
 #include <moveit_msgs/AttachedCollisionObject.h>
@@ -12,10 +13,12 @@
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/Point.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/String.h>
 using namespace Eigen;
 using namespace std;
 
 bool flag;
+std_msgs::String laser;
 std_msgs::Float64 joint1_goal;
 std_msgs::Float64 joint2_goal;
 std_msgs::Float64 joint3_goal;
@@ -28,12 +31,12 @@ geometry_msgs::Point C1, C2, C3, C4;
 vector<geometry_msgs::Point> pointArray;
 void initPoints(vector<geometry_msgs::Point> &SpointArray);
 void setJointGoal(string mode, vector<double> &joint_group_positions);
-geometry_msgs::Pose ConstructPose(VectorXd position, VectorXd orientation);
 
 class MoveitNavigation
 {
 private:
 	ros::Publisher local_goal_pub;
+	ros::Publisher arduino_pub;
 	ros::Subscriber joint1_sub;
 	ros::Subscriber joint2_sub;
 	ros::Subscriber joint3_sub;
@@ -43,6 +46,7 @@ private:
 public:
 	MoveitNavigation(ros::NodeHandle n)
 	{
+		arduino_pub = n.advertise<std_msgs::String>("laser_msg", 1);
 		local_goal_pub = n.advertise<geometry_msgs::Point>("moveit_goal",1);
 		joint1_sub = n.subscribe("/abb_irb120/joint_1_position_controller/command",1,&MoveitNavigation::Joint1Callback, this);
 		joint2_sub = n.subscribe("/abb_irb120/joint_2_position_controller/command",1,&MoveitNavigation::Joint2Callback, this);
@@ -59,5 +63,6 @@ public:
 	void Joint6Callback(const std_msgs::Float64 joint6_msg);
 	void pub_local_goal(double x, double y, double z);
 	void pub_point (geometry_msgs::Point point, double dx, double dy, double dz);
-
+	void laserOn(void);
+	void laserOff(void);
 };

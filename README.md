@@ -20,9 +20,13 @@ MoveIt!: $ sudo apt-get install ros-kinetic-moveit
 ```
 ### Repository Overview
 Here is the outline of this repository and notes on how to replicate some of the folder contents.
+<<<<<<< HEAD
 - **/Others** folder is for online backup and displaying image only, no need to clone for project development.
+=======
+- **/Others** folder is for online backup and displaying image only, no need to clone for project development (there is a .gitignore file in place to untrack this folder).
+>>>>>>> bf9fef71f428002891f314f3e20e0912028090d3
 
-- **/src/abb** folder includes ABB ROS drivers that enables communication with the ABB robot through ROS, see [abb_drivers](http://wiki.ros.org/abb_driver) for more information or version updates. 
+- **/src/abb_driver** folder includes ABB ROS drivers that enables communication with the ABB robot through ROS, see [abb_drivers](http://wiki.ros.org/abb_driver) for more information or version updates. 
 
 - **/src/irb120_description** includes the STL mashes for the robot model and URDF file that defiles the connectin among robot links. [Xacro](http://wiki.ros.org/xacro) was used to simplify the coding process and it can use terminal commands such as	 ` $ rosrun xacro xacro --inorder model.xacro > model.urdf`
 
