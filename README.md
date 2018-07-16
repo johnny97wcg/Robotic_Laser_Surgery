@@ -20,11 +20,8 @@ MoveIt!: $ sudo apt-get install ros-kinetic-moveit
 ```
 ### Repository Overview
 Here is the outline of this repository and notes on how to replicate some of the folder contents.
-<<<<<<< HEAD
+
 - **/Others** folder is for online backup and displaying image only, no need to clone for project development.
-=======
-- **/Others** folder is for online backup and displaying image only, no need to clone for project development (there is a .gitignore file in place to untrack this folder).
->>>>>>> bf9fef71f428002891f314f3e20e0912028090d3
 
 - **/src/abb_driver** folder includes ABB ROS drivers that enables communication with the ABB robot through ROS, see [abb_drivers](http://wiki.ros.org/abb_driver) for more information or version updates. 
 
@@ -35,6 +32,8 @@ Here is the outline of this repository and notes on how to replicate some of the
 - **/src/matlab_codes** folder hosts all the matlab functions and scripts, and this is the folder that needs to be set as 'current folder' in matlab.
 
 - **/src/moveit** folder includes the c++ file for moveitNavigation node, this is the program that communicates with matlab and send goals to the robot joint trajectory. 
+
+- **/src/Laser_Control_Module** serial communication packet that enable laser activation from computer, given by Benjamin Gillette. The laser_control_model subfolder shows the code stored in the arduino, and the pyarduino subfolder includes python scripts for testing. 
 
 ### Initial Setup
 clone this git repo locally, setup catkin workspace, and source the path
