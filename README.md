@@ -99,6 +99,3 @@ Once the power is turned on and robot controller is connected to the desktop thr
 # Author
 ##### Chenggu Wang 
 Studying in BS program in Robotic Enginnering and Mechanical Engineering at Worcester Polytechnic Institute (class of 2019). Area of research is ROS C++ programming, robotic control and serial communication.
-# Co-Author
-##### Samantha Moriarty
-Studying in BS program in Biomedical Engineering at Worcester Polytechnic Institute (class of 2019). Area of research is fabrication and analysis of tissues for laser experiment
