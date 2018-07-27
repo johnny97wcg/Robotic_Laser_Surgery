@@ -117,6 +117,37 @@ void MoveitNavigation::laserOff(void)
 	arduino_pub.publish(laser);
 }
 
+double vectorAbs(vector<double> v1, vector<double> v2)
+{
+	int l1 = v1.size();
+	int l2 = v2.size();
+	double Abs = 0;
+	if (l1 != l2)
+	{
+		cout<<"error: vector size mismatch"<<endl;
+		return 999;
+	}
+	else // compare each element in the vector and calculate the sum of absolute difference
+	{
+		for (int i=0; i<l1; i++)
+		{
+			Abs += abs(v1[i]-v2[i]);
+		}
+	}
+	return Abs/l1;
+}
+
+void printVector(vector<double> v)
+{
+	int l = v.size();
+	cout<<"printing vector: ";
+	for (int i=0; i<l; i++)
+	{
+		cout<<v[i]<<", ";
+	}
+	cout<<endl;
+}
+
 int main(int argc, char** argv)
 {
 	ros::init(argc, argv, "move_group_interface");
@@ -181,33 +212,33 @@ int main(int argc, char** argv)
 			{ // first row, single pass, left->right
 				if (counter%2 == 0) // 1
 				{
-					nav_obj.pub_point(pointArray[counter/2],8,0,2); // left
+					nav_obj.pub_point(pointArray[counter/2],9,0,5); // left
 				}
 				else // 2
 				{
-					nav_obj.pub_point(pointArray[counter/2],-8,0,2); // right
+					nav_obj.pub_point(pointArray[counter/2],-8,0,5); // right
 				}
 			}
 			else if (8 <= counter && counter , counter < 16)
 			{ // second row, double pass, left->right->left
 				if ((counter-8)%2 == 1) // 2
 				{
-					nav_obj.pub_point(pointArray[4+(counter-8)/2],-8,0,2); // right
+					nav_obj.pub_point(pointArray[4+(counter-8)/2],-8,0,5); // right
 				}
 				else // 1, 3
 				{
-					nav_obj.pub_point(pointArray[4+(counter-8)/2],8,0,2); // left
+					nav_obj.pub_point(pointArray[4+(counter-8)/2],9,0,5); // left
 				}
 			}
 			else
 			{ // second row, double pass, left->right->left->right
 				if ((counter-16)%2 == 0) // 1, 3
 				{
-					nav_obj.pub_point(pointArray[8+(counter-16)/2],8,0,2); // left
+					nav_obj.pub_point(pointArray[8+(counter-16)/2],9,0,5); // left
 				}
 				else // 2, 4
 				{
-					nav_obj.pub_point(pointArray[8+(counter-16)/2],-8,0,2); // right
+					nav_obj.pub_point(pointArray[8+(counter-16)/2],-8,0,5); // right
 				}
 			}
 
@@ -220,6 +251,7 @@ int main(int argc, char** argv)
 			}
 
 			// sending joint Angles
+			joint_start = move_group.getCurrentJointValues(); // starting angle
 			setJointGoal("goal", joint_group_positions); // helper function that sets the joint space goal
 			move_group.setJointValueTarget(joint_group_positions);
 			if (counter == 1 || counter == 9 || counter == 17) //set speed for each section
@@ -239,10 +271,28 @@ int main(int argc, char** argv)
 			ROS_INFO_NAMED("Visualizing plan 1 (joint space goal) %s", success ? "SUCCESS":"FAILED");
 			if (counter%2 == 1)
 			{
-				nav_obj.laserOn(); // activate the laser for 1 sec
-				move_group.execute(my_plan);
-				sleep(0.5);
+				//printVector(joint_start);
+				//printVector(joint_group_positions);
+				move_group.asyncExecute(my_plan); // non-blocking execute
+
+				do{
+					joint_current = move_group.getCurrentJointValues();
+					Abs = vectorAbs(joint_current,joint_start);
+					cout << "absolute difference: " << Abs << endl;
+				}while(Abs<1E-6); // exit after the motion started "by enoungh distance"
+				nav_obj.laserOn(); // activate the laser
+
+				do{
+					joint_current = move_group.getCurrentJointValues();
+					Abs = vectorAbs(joint_current,joint_group_positions);
+					cout << "absolute difference: " << Abs << endl;
+				}while(Abs>1E-3); // exit after reached the goal "within the tolerance"
+
 				nav_obj.laserOff();
+
+				// nav_obj.laserOn(); // activate the laser for 1 sec
+				// move_group.execute(my_plan);
+				// nav_obj.laserOff();
 			}
 
 			else

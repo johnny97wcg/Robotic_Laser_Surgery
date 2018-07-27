@@ -34,5 +34,5 @@ if __name__ == '__main__':
     laser_control_module = Arduino('/dev/ttyACM0')
     #Wait a few seconds to make sure we're connected before sending messages
     time.sleep(2)
-
+    print("start listening")
     arduino_listener()

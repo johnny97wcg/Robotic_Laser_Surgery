@@ -18,6 +18,7 @@ using namespace Eigen;
 using namespace std;
 
 bool flag;
+double Abs;
 std_msgs::String laser;
 std_msgs::Float64 joint1_goal;
 std_msgs::Float64 joint2_goal;
@@ -29,8 +30,12 @@ geometry_msgs::Point A1, A2, A3, A4;
 geometry_msgs::Point B1, B2, B3, B4;
 geometry_msgs::Point C1, C2, C3, C4;
 vector<geometry_msgs::Point> pointArray;
-void initPoints(vector<geometry_msgs::Point> &SpointArray);
+void initPoints(vector<geometry_msgs::Point> &pointArray);
 void setJointGoal(string mode, vector<double> &joint_group_positions);
+double vectorAbs(vector<double> v1, vector<double> v2);
+void printVector(vector<double> v);
+vector<double> joint_start;
+vector<double> joint_current;
 
 class MoveitNavigation
 {
