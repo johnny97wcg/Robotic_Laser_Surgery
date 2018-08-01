@@ -199,48 +199,24 @@ int main(int argc, char** argv)
 	while(cin >> input)
 	{
 		cout << "input :" << input << endl;
-		if (input == 'n' || counter >= 24)
+		if (input == 'n' || counter >= 120)
 		{
 			break;
 		}
 
-		else if (input == 'y' && counter < 24)
+		else if (input == 'y' && counter < 120)
 		{
 			cout << "moving to next location" << endl;
 			// setting point goal in the workobject	reference frame
-			if (counter < 8)
-			{ // first row, single pass, left->right
+			// 5 passes per row, left->right
 				if (counter%2 == 0) // 1
 				{
-					nav_obj.pub_point(pointArray[counter/2],9,0,5); // left
+					nav_obj.pub_point(pointArray[counter/10],9,0,5); // left
 				}
 				else // 2
 				{
-					nav_obj.pub_point(pointArray[counter/2],-8,0,5); // right
+					nav_obj.pub_point(pointArray[counter/10],-8,0,5); // right
 				}
-			}
-			else if (8 <= counter && counter , counter < 16)
-			{ // second row, double pass, left->right->left
-				if ((counter-8)%2 == 1) // 2
-				{
-					nav_obj.pub_point(pointArray[4+(counter-8)/2],-8,0,5); // right
-				}
-				else // 1, 3
-				{
-					nav_obj.pub_point(pointArray[4+(counter-8)/2],9,0,5); // left
-				}
-			}
-			else
-			{ // second row, double pass, left->right->left->right
-				if ((counter-16)%2 == 0) // 1, 3
-				{
-					nav_obj.pub_point(pointArray[8+(counter-16)/2],9,0,5); // left
-				}
-				else // 2, 4
-				{
-					nav_obj.pub_point(pointArray[8+(counter-16)/2],-8,0,5); // right
-				}
-			}
 
 			flag = true;
 			while (flag) // wait for matlab
@@ -254,13 +230,13 @@ int main(int argc, char** argv)
 			joint_start = move_group.getCurrentJointValues(); // starting angle
 			setJointGoal("goal", joint_group_positions); // helper function that sets the joint space goal
 			move_group.setJointValueTarget(joint_group_positions);
-			if (counter == 1 || counter == 9 || counter == 17) //set speed for each section
+			if (counter == 1 || counter == 41 || counter == 81) //set speed for each section
 			{
 				// restrict the max speed and acceleation for short dist motion (1% of actual max)
 				move_group.setMaxAccelerationScalingFactor(0.01);
 				move_group.setMaxVelocityScalingFactor(0.01);
 			}
-			else if (counter == 8 || counter == 16)
+			else if (counter == 40 || counter == 80)
 			{
 				// restrict the max speed and acceleation for long dist motion (10% of actual max)
 				move_group.setMaxAccelerationScalingFactor(0.1);
