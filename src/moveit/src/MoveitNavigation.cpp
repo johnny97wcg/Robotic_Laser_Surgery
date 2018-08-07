@@ -193,30 +193,60 @@ int main(int argc, char** argv)
 	*/
 
 	char input;
+	int numPass;
+	numPass = 5;
 	int counter;
-  counter = 0;
+  counter = 80; // set start. numPass*8*(row N) = start of (N+1)th row (0 being 1st row)
 	cout<< "waiting for keyboard input (y/n)" <<endl;
 	while(cin >> input)
 	{
 		cout << "input :" << input << endl;
-		if (input == 'n' || counter >= 120)
+		if (input == 'n' || counter >= 24*numPass)
 		{
 			break;
 		}
 
-		else if (input == 'y' && counter < 120)
+		else if (input == 'y')
 		{
 			cout << "moving to next location" << endl;
 			// setting point goal in the workobject	reference frame
 			// 5 passes per row, left->right
+			if (counter < 8*numPass) // 1st row
+			{
 				if (counter%2 == 0) // 1
 				{
-					nav_obj.pub_point(pointArray[counter/10],9,0,5); // left
+					nav_obj.pub_point(pointArray[counter/(2*numPass)],8,0,1); // left (offset start delay)
 				}
 				else // 2
 				{
-					nav_obj.pub_point(pointArray[counter/10],-8,0,5); // right
+					nav_obj.pub_point(pointArray[counter/(2*numPass)],-8,0,1); // right
 				}
+
+			}
+			else if (8*numPass <= counter && counter < 16*numPass) // 2nd row
+			{
+				if (counter%2 == 0) // 1
+				{
+					nav_obj.pub_point(pointArray[counter/(2*numPass)],8,0,2); // left (offset start delay)
+				}
+				else // 2
+				{
+					nav_obj.pub_point(pointArray[counter/(2*numPass)],-8,0,2); // right
+				}
+
+			}
+			else // 3rd row
+			{
+				if (counter%2 == 0) // 1
+				{
+					nav_obj.pub_point(pointArray[counter/(2*numPass)],8,0,5); // left (offset start delay)
+				}
+				else // 2
+				{
+					nav_obj.pub_point(pointArray[counter/(2*numPass)],-8,0,5); // right
+				}
+
+			}
 
 			flag = true;
 			while (flag) // wait for matlab
@@ -230,23 +260,26 @@ int main(int argc, char** argv)
 			joint_start = move_group.getCurrentJointValues(); // starting angle
 			setJointGoal("goal", joint_group_positions); // helper function that sets the joint space goal
 			move_group.setJointValueTarget(joint_group_positions);
-			if (counter == 1 || counter == 41 || counter == 81) //set speed for each section
-			{
-				// restrict the max speed and acceleation for short dist motion (1% of actual max)
-				move_group.setMaxAccelerationScalingFactor(0.01);
-				move_group.setMaxVelocityScalingFactor(0.01);
-			}
-			else if (counter == 40 || counter == 80)
-			{
-				// restrict the max speed and acceleation for long dist motion (10% of actual max)
-				move_group.setMaxAccelerationScalingFactor(0.1);
-				move_group.setMaxVelocityScalingFactor(0.1);
-			}
+			// if (counter%2 == 1) //== 1 || counter == 41 || counter == 81) //set speed for each section
+			// {
+			// 	// restrict the max speed and acceleation for short dist motion (1% of actual max)
+			// 	move_group.setMaxAccelerationScalingFactor(0.01);
+			// 	move_group.setMaxVelocityScalingFactor(0.01);
+			// }
+			// else if (counter%2 == 0) //== 40 || counter == 80) //move to next row
+			// {
+			// 	// restrict the max speed and acceleation for long dist motion (10% of actual max)
+			// 	move_group.setMaxAccelerationScalingFactor(0.1);
+			// 	move_group.setMaxVelocityScalingFactor(0.1);
+			// }
 
 			moveit::planning_interface::MoveItErrorCode success = move_group.plan(my_plan);
 			ROS_INFO_NAMED("Visualizing plan 1 (joint space goal) %s", success ? "SUCCESS":"FAILED");
 			if (counter%2 == 1)
 			{
+				// restrict the max speed and acceleation for short dist motion (1% of actual max)
+				move_group.setMaxAccelerationScalingFactor(0.1);
+				move_group.setMaxVelocityScalingFactor(0.1);
 				//printVector(joint_start);
 				//printVector(joint_group_positions);
 				move_group.asyncExecute(my_plan); // non-blocking execute
@@ -254,25 +287,24 @@ int main(int argc, char** argv)
 				do{
 					joint_current = move_group.getCurrentJointValues();
 					Abs = vectorAbs(joint_current,joint_start);
-					cout << "absolute difference: " << Abs << endl;
+					//cout << "absolute difference: " << Abs << endl;
 				}while(Abs<1E-6); // exit after the motion started "by enoungh distance"
 				nav_obj.laserOn(); // activate the laser
 
 				do{
 					joint_current = move_group.getCurrentJointValues();
 					Abs = vectorAbs(joint_current,joint_group_positions);
-					cout << "absolute difference: " << Abs << endl;
+					//cout << "absolute difference: " << Abs << endl;
 				}while(Abs>1E-3); // exit after reached the goal "within the tolerance"
 
 				nav_obj.laserOff();
-
-				// nav_obj.laserOn(); // activate the laser for 1 sec
-				// move_group.execute(my_plan);
-				// nav_obj.laserOff();
 			}
 
 			else
 			{
+				// restrict the max speed and acceleation for long dist motion (10% of actual max)
+				move_group.setMaxAccelerationScalingFactor(0.01);
+				move_group.setMaxVelocityScalingFactor(0.01);
 				move_group.execute(my_plan);
 			}
 			counter ++;
